@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
-import { getCart, getAddresses, createOrder, formatPrice, COD_FEE } from '@/lib/db';
+import { getCart, getAddresses, addAddress, createOrder, formatPrice, COD_FEE } from '@/lib/db';
 
 export default function CheckoutPage() {
     const { user, loading: authLoading } = useAuth();
@@ -15,6 +15,11 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(true);
     const [placing, setPlacing] = useState(false);
     const [error, setError] = useState('');
+    const [showAddressForm, setShowAddressForm] = useState(false);
+    const [addressForm, setAddressForm] = useState({
+        address_line1: '', address_line2: '', city: '', state: '', postal_code: '', country: 'India', is_default: true
+    });
+    const [savingAddress, setSavingAddress] = useState(false);
 
     useEffect(() => {
         if (authLoading) return;
@@ -24,14 +29,31 @@ export default function CheckoutPage() {
                 setCartItems(cart);
                 setAddresses(addrs);
                 if (addrs.length > 0) setSelectedAddress(addrs[0].id);
+                else setShowAddressForm(true);
             }).catch(console.error).finally(() => setLoading(false));
     }, [user, authLoading, router]);
 
     const total = cartItems.reduce((sum, item) => sum + Number(item.sneaker?.price || 0), 0);
     const finalTotal = paymentMethod === 'cod' ? total + COD_FEE : total;
 
+    const handleAddAddress = async (e) => {
+        e.preventDefault();
+        setSavingAddress(true);
+        try {
+            const newAddr = await addAddress(user.id, addressForm);
+            setAddresses([...addresses, newAddr]);
+            setSelectedAddress(newAddr.id);
+            setShowAddressForm(false);
+            setAddressForm({ address_line1: '', address_line2: '', city: '', state: '', postal_code: '', country: 'India', is_default: true });
+        } catch (err) {
+            setError('Failed to save address. Please try again.');
+        } finally {
+            setSavingAddress(false);
+        }
+    };
+
     const handlePlaceOrder = async () => {
-        if (!selectedAddress) { setError('Please select a shipping address.'); return; }
+        if (!selectedAddress) { setError('Please add a shipping address first.'); return; }
         if (cartItems.length === 0) { setError('Your cart is empty.'); return; }
         setPlacing(true); setError('');
         try {
@@ -42,12 +64,25 @@ export default function CheckoutPage() {
                 router.push(`/order-confirmation?orderId=${order.id}`);
             }
         } catch (err) {
-            setError(err.message || 'Failed to place order.');
+            setError(err.message || 'Failed to place order. Please try again.');
             setPlacing(false);
         }
     };
 
     if (loading || authLoading) return <div className="container"><p style={{ textAlign: 'center', padding: 60, color: 'var(--text-secondary)' }}>Loading...</p></div>;
+
+    if (cartItems.length === 0) {
+        return (
+            <div className="container">
+                <div className="empty-cart">
+                    <div className="empty-cart-icon"><i className="fas fa-shopping-cart"></i></div>
+                    <h2>Your cart is empty</h2>
+                    <p>Add some sneakers to your cart before checking out.</p>
+                    <Link href="/search" className="btn">Browse Sneakers</Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="container">
@@ -57,7 +92,7 @@ export default function CheckoutPage() {
                 <div className="checkout-form">
                     <section className="checkout-section">
                         <h2>Shipping Address</h2>
-                        {addresses.length > 0 ? (
+                        {addresses.length > 0 && (
                             <div className="address-selection">
                                 {addresses.map(addr => (
                                     <div key={addr.id} className="address-option">
@@ -76,8 +111,54 @@ export default function CheckoutPage() {
                                     </div>
                                 ))}
                             </div>
-                        ) : (
-                            <p style={{ color: 'var(--text-secondary)' }}>No addresses saved. <Link href="/account#addresses">Add an address first</Link>.</p>
+                        )}
+                        {!showAddressForm && (
+                            <button className="btn btn-secondary" style={{ marginTop: 15 }} onClick={() => setShowAddressForm(true)}>
+                                <i className="fas fa-plus"></i> Add New Address
+                            </button>
+                        )}
+                        {showAddressForm && (
+                            <div style={{ background: 'var(--bg-light)', borderRadius: 8, padding: 20, marginTop: 15 }}>
+                                <h3 style={{ marginBottom: 15 }}>Add Shipping Address</h3>
+                                <form onSubmit={handleAddAddress}>
+                                    <div className="form-group">
+                                        <label>Address Line 1 *</label>
+                                        <input type="text" value={addressForm.address_line1} onChange={e => setAddressForm({ ...addressForm, address_line1: e.target.value })} placeholder="House/Flat No, Street" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Address Line 2</label>
+                                        <input type="text" value={addressForm.address_line2} onChange={e => setAddressForm({ ...addressForm, address_line2: e.target.value })} placeholder="Landmark, Area (optional)" />
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>City *</label>
+                                            <input type="text" value={addressForm.city} onChange={e => setAddressForm({ ...addressForm, city: e.target.value })} placeholder="Mumbai" required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>State *</label>
+                                            <input type="text" value={addressForm.state} onChange={e => setAddressForm({ ...addressForm, state: e.target.value })} placeholder="Maharashtra" required />
+                                        </div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Postal Code *</label>
+                                            <input type="text" value={addressForm.postal_code} onChange={e => setAddressForm({ ...addressForm, postal_code: e.target.value })} placeholder="400001" required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Country *</label>
+                                            <input type="text" value={addressForm.country} onChange={e => setAddressForm({ ...addressForm, country: e.target.value })} required />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 10 }}>
+                                        <button type="submit" className="btn btn-gradient" disabled={savingAddress}>
+                                            {savingAddress ? 'Saving...' : 'Save Address'}
+                                        </button>
+                                        {addresses.length > 0 && (
+                                            <button type="button" className="btn btn-secondary" onClick={() => setShowAddressForm(false)}>Cancel</button>
+                                        )}
+                                    </div>
+                                </form>
+                            </div>
                         )}
                     </section>
                     <section className="checkout-section">
@@ -88,7 +169,7 @@ export default function CheckoutPage() {
                                     <input type="radio" name="payment_method" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
                                     <div className="payment-card-select">
                                         <div className="payment-icon"><i className="fas fa-mobile-alt"></i></div>
-                                        <div className="payment-details"><h3>Pay with UPI</h3><p>Google Pay, PhonePe, etc.</p></div>
+                                        <div className="payment-details"><h3>Pay with UPI</h3><p>Google Pay, PhonePe, Paytm</p></div>
                                     </div>
                                 </label>
                             </div>
@@ -104,7 +185,9 @@ export default function CheckoutPage() {
                         </div>
                     </section>
                     <div className="checkout-actions">
-                        <button className="btn btn-success" onClick={handlePlaceOrder} disabled={placing}>{placing ? 'Placing Order...' : 'Place Order'}</button>
+                        <button className="btn btn-gradient" onClick={handlePlaceOrder} disabled={placing || !selectedAddress}>
+                            {placing ? <><span className="btn-spinner"></span> Placing Order...</> : 'Place Order'}
+                        </button>
                         <Link href="/cart" className="btn btn-secondary">Back to Cart</Link>
                     </div>
                 </div>

@@ -25,7 +25,7 @@ function PaymentContent() {
     }, [orderId, user, authLoading, router]);
 
     const copyUpiId = () => {
-        navigator.clipboard.writeText('sajidnafiskhan-1@oksbi');
+        navigator.clipboard.writeText('7208434724@ptsbi');
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -82,7 +82,7 @@ function PaymentContent() {
                         <div className="upi-id-card">
                             <label>UPI ID</label>
                             <div className="upi-id-copy">
-                                <code>sajidnafiskhan-1@oksbi</code>
+                                <code>7208434724@ptsbi</code>
                                 <button className="btn-copy" onClick={copyUpiId}>
                                     <i className={`fas ${copied ? 'fa-check' : 'fa-copy'}`}></i>
                                     {copied ? 'Copied!' : 'Copy'}

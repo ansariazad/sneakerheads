@@ -1,12 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from '@/lib/auth';
 
-export default function LoginPage() {
+function LoginContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get('redirect') || '/';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,7 +20,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             await signIn({ email, password });
-            router.push('/');
+            router.push(redirectTo);
             router.refresh();
         } catch (err) {
             setError(err.message || 'Login failed. Please check your credentials.');
@@ -59,5 +61,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="auth-page"><p style={{ color: 'var(--text-secondary)' }}>Loading...</p></div>}>
+            <LoginContent />
+        </Suspense>
     );
 }
