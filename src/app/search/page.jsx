@@ -1,10 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SneakerCard from '@/components/SneakerCard';
 import { getSneakers, getBrands, getAvailableSizes } from '@/lib/db';
 
-export default function SearchPage() {
+function SearchContent() {
     const searchParams = useSearchParams();
     const [sneakers, setSneakers] = useState([]);
     const [brands, setBrands] = useState([]);
@@ -104,5 +104,13 @@ export default function SearchPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<div className="container"><p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: 40 }}>Loading...</p></div>}>
+            <SearchContent />
+        </Suspense>
     );
 }
