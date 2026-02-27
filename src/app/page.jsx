@@ -40,10 +40,10 @@ export default function HomePage() {
         <div className="container">
             <div className="hero">
                 <div className="hero-content">
-                    <h1>Find Your Perfect Pair</h1>
-                    <p>Buy and sell authentic sneakers with confidence</p>
+                    <h1>Find Your <span>Perfect Pair</span></h1>
+                    <p>India&apos;s #1 marketplace for buying and selling 100% authenticated sneakers</p>
                     <div className="hero-buttons">
-                        <Link href="/search" className="btn">Shop Now</Link>
+                        <Link href="/search" className="btn btn-gradient">Shop Now <i className="fas fa-arrow-right" style={{ marginLeft: 6 }}></i></Link>
                         <Link href="/seller/sneakers/add" className="btn btn-secondary">Sell Sneakers</Link>
                     </div>
                 </div>
