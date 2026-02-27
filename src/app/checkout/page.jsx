@@ -36,7 +36,11 @@ export default function CheckoutPage() {
         setPlacing(true); setError('');
         try {
             const order = await createOrder(user.id, selectedAddress, paymentMethod, cartItems);
-            router.push(`/order-confirmation?orderId=${order.id}`);
+            if (paymentMethod === 'upi') {
+                router.push(`/payment?orderId=${order.id}`);
+            } else {
+                router.push(`/order-confirmation?orderId=${order.id}`);
+            }
         } catch (err) {
             setError(err.message || 'Failed to place order.');
             setPlacing(false);
