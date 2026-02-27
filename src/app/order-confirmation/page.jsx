@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/components/AuthProvider';
 import { getOrder, formatPrice } from '@/lib/db';
+import { generateInvoice } from '@/lib/invoice';
 
 function OrderConfirmationContent() {
     const searchParams = useSearchParams();
@@ -63,6 +64,7 @@ function OrderConfirmationContent() {
                     )}
                 </div>
                 <div className="confirmation-actions">
+                    {order && <button className="btn btn-gradient" onClick={() => generateInvoice(order)}><i className="fas fa-file-pdf" style={{ marginRight: 8 }}></i>Download Invoice</button>}
                     <Link href="/orders" className="btn">View My Orders</Link>
                     <Link href="/" className="btn btn-secondary">Continue Shopping</Link>
                 </div>

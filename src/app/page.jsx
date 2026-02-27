@@ -1,9 +1,25 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getSneakers, getBrands } from '@/lib/db';
-import { formatPrice } from '@/lib/db';
 import SneakerCard from '@/components/SneakerCard';
+
+const showcaseSneakers = [
+    { id: 'showcase-1', brand: 'Nike', model: 'Air Jordan 1 Retro High OG', size: 9, price: 16995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-jordan1.png', display_order: 0 }] },
+    { id: 'showcase-2', brand: 'Adidas', model: 'Yeezy Boost 350 V2', size: 10, price: 22999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/adidas-yeezy350.png', display_order: 0 }] },
+    { id: 'showcase-3', brand: 'Nike', model: 'Dunk Low Panda', size: 8, price: 8995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-dunk-low.png', display_order: 0 }] },
+    { id: 'showcase-4', brand: 'Jordan', model: 'Air Jordan 4 Retro', size: 11, price: 19999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/jordan4-retro.png', display_order: 0 }] },
+    { id: 'showcase-5', brand: 'Puma', model: 'RS-X Reinvention', size: 9, price: 7499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/puma-rsx.png', display_order: 0 }] },
+    { id: 'showcase-6', brand: 'Nike', model: 'Air Max 90 Infrared', size: 10, price: 12499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/nike-airmax90.png', display_order: 0 }] },
+    { id: 'showcase-7', brand: 'New Balance', model: '550 Green', size: 8, price: 10999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/newbalance-550.png', display_order: 0 }] },
+];
+
+const offers = [
+    { title: 'First Order Discount', subtitle: 'Get 15% off your first purchase', code: 'FIRST15', icon: 'fa-gift', gradient: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' },
+    { title: 'Free Shipping', subtitle: 'On all orders above ₹5,000', code: null, icon: 'fa-truck', gradient: 'linear-gradient(135deg, #06d6a0, #059669)' },
+    { title: 'Seller Special', subtitle: 'List your first pair for free', code: 'SELL0', icon: 'fa-store', gradient: 'linear-gradient(135deg, #f59e0b, #ef4444)' },
+];
 
 export default function HomePage() {
     const [featured, setFeatured] = useState([]);
@@ -13,28 +29,16 @@ export default function HomePage() {
 
     useEffect(() => {
         const load = async () => {
-            try {
-                const featuredRes = await getSneakers({ featured: true, limit: 4 });
-                setFeatured(featuredRes.data || []);
-            } catch (err) {
-                console.error('Error loading featured:', JSON.stringify(err), err?.message, err?.code);
-            }
-            try {
-                const newRes = await getSneakers({ limit: 8 });
-                setNewArrivals(newRes.data || []);
-            } catch (err) {
-                console.error('Error loading new arrivals:', JSON.stringify(err), err?.message);
-            }
-            try {
-                const brandsData = await getBrands();
-                setBrands((brandsData || []).slice(0, 6));
-            } catch (err) {
-                console.error('Error loading brands:', JSON.stringify(err), err?.message);
-            }
+            try { const r = await getSneakers({ featured: true, limit: 4 }); setFeatured(r.data || []); } catch { }
+            try { const r = await getSneakers({ limit: 8 }); setNewArrivals(r.data || []); } catch { }
+            try { const b = await getBrands(); setBrands((b || []).slice(0, 6)); } catch { }
             setLoading(false);
         };
         load();
     }, []);
+
+    const displayFeatured = featured.length > 0 ? featured : showcaseSneakers.filter(s => s.featured);
+    const displayArrivals = newArrivals.length > 0 ? newArrivals : showcaseSneakers;
 
     return (
         <div className="container">
@@ -49,53 +53,82 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className="featured-section">
-                <div className="section-header">
-                    <h2>Featured Sneakers</h2>
-                    <Link href="/search?featured=true">View All →</Link>
+            {/* Offers Banner */}
+            <div className="offers-section">
+                <div className="offers-grid">
+                    {offers.map((offer, i) => (
+                        <div key={i} className="offer-card" style={{ background: offer.gradient }}>
+                            <div className="offer-icon"><i className={`fas ${offer.icon}`}></i></div>
+                            <div className="offer-content">
+                                <h3>{offer.title}</h3>
+                                <p>{offer.subtitle}</p>
+                                {offer.code && <span className="offer-code">Code: {offer.code}</span>}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                {loading ? (
-                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: 40 }}>Loading sneakers...</p>
-                ) : featured.length > 0 ? (
-                    <div className="grid">{featured.map(s => <SneakerCard key={s.id} sneaker={s} />)}</div>
-                ) : (
-                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: 40 }}>No featured sneakers yet. Be the first to list one!</p>
-                )}
             </div>
 
+            {/* Featured Sneakers */}
             <div className="featured-section">
                 <div className="section-header">
-                    <h2>New Arrivals</h2>
-                    <Link href="/search?sort=newest">View All →</Link>
+                    <h2>🔥 Featured Sneakers</h2>
+                    <Link href="/search?featured=true" className="view-all">View All <i className="fas fa-arrow-right"></i></Link>
                 </div>
-                {!loading && newArrivals.length > 0 ? (
-                    <div className="grid">{newArrivals.map(s => <SneakerCard key={s.id} sneaker={s} />)}</div>
-                ) : !loading ? (
-                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: 40 }}>No sneakers listed yet.</p>
-                ) : null}
+                <div className="grid">
+                    {displayFeatured.map(s => <SneakerCard key={s.id} sneaker={s} />)}
+                </div>
             </div>
 
+            {/* New Arrivals */}
+            <div className="featured-section">
+                <div className="section-header">
+                    <h2>✨ New Arrivals</h2>
+                    <Link href="/search?sort=newest" className="view-all">View All <i className="fas fa-arrow-right"></i></Link>
+                </div>
+                <div className="grid">
+                    {displayArrivals.slice(0, 4).map(s => <SneakerCard key={s.id} sneaker={s} />)}
+                </div>
+            </div>
+
+            {/* Big Deal Banner */}
+            <div className="deal-banner">
+                <div className="deal-content">
+                    <span className="deal-badge">LIMITED TIME</span>
+                    <h2>Up to 40% Off on Premium Sneakers</h2>
+                    <p>Shop our exclusive collection of authenticated sneakers at unbeatable prices</p>
+                    <Link href="/search" className="btn btn-gradient">Shop the Sale <i className="fas fa-arrow-right" style={{ marginLeft: 6 }}></i></Link>
+                </div>
+            </div>
+
+            {/* Popular Brands */}
             <div className="brands-section">
                 <div className="section-header">
-                    <h2>Popular Brands</h2>
-                    <Link href="/search">View All →</Link>
+                    <h2>🏆 Popular Brands</h2>
+                    <Link href="/search" className="view-all">View All <i className="fas fa-arrow-right"></i></Link>
                 </div>
                 <div className="brands-grid">
-                    {brands.map(b => (
-                        <Link key={b.brand} href={`/search?brand=${encodeURIComponent(b.brand)}`} className="brand-card fade-in">
+                    {brands.length > 0 ? brands.map(b => (
+                        <Link key={b.brand} href={`/search?brand=${encodeURIComponent(b.brand)}`} className="brand-card">
                             <h3>{b.brand}</h3>
                             <p>{b.count} products</p>
+                        </Link>
+                    )) : ['Nike', 'Adidas', 'Jordan', 'Puma', 'New Balance', 'Reebok'].map(b => (
+                        <Link key={b} href={`/search?brand=${encodeURIComponent(b)}`} className="brand-card">
+                            <h3>{b}</h3>
+                            <p>Shop collection</p>
                         </Link>
                     ))}
                 </div>
             </div>
 
+            {/* How It Works */}
             <div className="how-it-works">
-                <div className="section-header"><h2>How It Works</h2></div>
+                <div className="section-header"><h2>🛡️ How It Works</h2></div>
                 <div className="steps-grid">
-                    <div className="step-card fade-in"><div className="step-icon"><i className="fas fa-search"></i></div><h3>Find</h3><p>Browse our collection of authentic sneakers from top sellers</p></div>
-                    <div className="step-card fade-in"><div className="step-icon"><i className="fas fa-shopping-cart"></i></div><h3>Buy</h3><p>Purchase with confidence using our secure payment system</p></div>
-                    <div className="step-card fade-in"><div className="step-icon"><i className="fas fa-box"></i></div><h3>Enjoy</h3><p>Receive your authenticated sneakers delivered to your doorstep</p></div>
+                    <div className="step-card"><div className="step-icon"><i className="fas fa-search"></i></div><h3>Find</h3><p>Browse our collection of authentic sneakers from verified sellers across India</p></div>
+                    <div className="step-card"><div className="step-icon"><i className="fas fa-shield-alt"></i></div><h3>Authenticate</h3><p>Every pair is verified by our experts before it reaches you</p></div>
+                    <div className="step-card"><div className="step-icon"><i className="fas fa-box"></i></div><h3>Enjoy</h3><p>Receive your authenticated sneakers with free shipping & easy returns</p></div>
                 </div>
             </div>
         </div>

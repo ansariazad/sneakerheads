@@ -928,6 +928,144 @@ textarea:focus {
   font-size: 14px;
 }
 
+/* ===== PAGE TITLE ===== */
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* ===== OFFERS SECTION ===== */
+.offers-section {
+  margin-bottom: 50px;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.offer-card {
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: var(--transition);
+}
+
+.offer-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.offer-icon {
+  font-size: 28px;
+  color: white;
+  opacity: 0.9;
+}
+
+.offer-content h3 {
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.offer-content p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+}
+
+.offer-code {
+  display: inline-block;
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* ===== DEAL BANNER ===== */
+.deal-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(6, 214, 160, 0.08));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 50px 40px;
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.deal-banner::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+  top: -100px;
+  right: -50px;
+}
+
+.deal-content {
+  position: relative;
+  z-index: 1;
+}
+
+.deal-badge {
+  display: inline-block;
+  background: var(--gradient);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 16px;
+}
+
+.deal-content h2 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.deal-content p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+/* ===== CARD PRICING ===== */
+.card-pricing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-original-price {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.card-discount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: rgba(6, 214, 160, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
 /* ===== SNEAKER CARDS ===== */
 .sneaker-card {
   background: var(--bg-secondary);
@@ -2690,6 +2828,56 @@ small {
 
   .payment-content-grid {
     grid-template-columns: 1fr;
+  }
+
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deal-banner {
+    padding: 35px 20px;
+  }
+
+  .deal-content h2 {
+    font-size: 22px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-bar {
+    display: none;
+  }
+
+  .main-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-color);
+    z-index: 999;
+    padding: 80px 20px 20px;
+  }
+
+  .main-nav.show {
+    display: block;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .main-nav a {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .burger-menu {
+    display: flex;
   }
 
   .brands-grid,

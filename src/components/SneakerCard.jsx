@@ -1,35 +1,40 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { formatPrice } from '@/lib/db';
 
 export default function SneakerCard({ sneaker }) {
-    const sortedImages = (sneaker.images || []).sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-    const imageUrl = sortedImages[0]?.image_url || `https://placehold.co/400x300/2d2d2d/3498db?text=${encodeURIComponent(sneaker.brand + ' ' + sneaker.model)}`;
+    const imageUrl = sneaker.images?.[0]?.image_url || `/images/sneakers/nike-jordan1.png`;
+    const isShowcase = sneaker.id?.startsWith?.('showcase-');
+    const href = isShowcase ? '/search' : `/sneaker/${sneaker.id}`;
+    const isExternal = imageUrl.startsWith('http');
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price);
+    };
+
+    const originalPrice = sneaker.featured ? Math.round(sneaker.price * 1.2) : null;
 
     return (
-        <div className="sneaker-card">
+        <Link href={href} className="sneaker-card">
             <div className="card-img">
-                <Image
-                    src={imageUrl}
-                    alt={`${sneaker.brand} ${sneaker.model}`}
-                    fill
-                    sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    style={{ objectFit: 'cover' }}
-                    loading="lazy"
-                />
-                {sneaker.featured && <span className="featured-badge">Featured</span>}
-                {sneaker.condition && sneaker.condition !== 'new' && <span className="condition-badge">{sneaker.condition.replace('_', ' ')}</span>}
+                {isExternal ? (
+                    <Image src={imageUrl} alt={`${sneaker.brand} ${sneaker.model}`} fill sizes="(max-width: 768px) 50vw, 25vw" style={{ objectFit: 'cover' }} loading="lazy" />
+                ) : (
+                    <Image src={imageUrl} alt={`${sneaker.brand} ${sneaker.model}`} fill sizes="(max-width: 768px) 50vw, 25vw" style={{ objectFit: 'cover' }} loading="lazy" />
+                )}
+                {sneaker.featured && <span className="featured-badge">Hot 🔥</span>}
+                {sneaker.condition && <span className="condition-badge">{sneaker.condition}</span>}
             </div>
             <div className="card-body">
-                <p className="card-brand">{sneaker.brand}</p>
+                <div className="card-brand">{sneaker.brand}</div>
                 <h3 className="card-title">{sneaker.model}</h3>
                 <p className="card-text">Size: {sneaker.size} UK</p>
-                <div className="card-price">{formatPrice(sneaker.price)}</div>
+                <div className="card-pricing">
+                    <span className="card-price">{formatPrice(sneaker.price)}</span>
+                    {originalPrice && <span className="card-original-price">{formatPrice(originalPrice)}</span>}
+                    {originalPrice && <span className="card-discount">-20%</span>}
+                </div>
             </div>
-            <div className="card-footer">
-                <Link href={`/sneaker/${sneaker.id}`} className="btn">View Details</Link>
-            </div>
-        </div>
+        </Link>
     );
 }
