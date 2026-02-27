@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="shoeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498db"/>
+      <stop offset="100%" style="stop-color:#1abc9c"/>
+    </linearGradient>
+    <linearGradient id="soleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2980b9"/>
+      <stop offset="100%" style="stop-color:#16a085"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Circle background -->
+  <circle cx="100" cy="100" r="90" fill="#1e1e1e" stroke="url(#shoeGrad)" stroke-width="3"/>
+  <!-- Sneaker shoe body -->
+  <g filter="url(#glow)" transform="translate(30, 55)">
+    <!-- Sole -->
+    <path d="M10 70 Q5 65 8 58 L25 55 L120 50 Q135 50 140 55 L140 65 Q140 72 130 73 L20 75 Q12 75 10 70Z" fill="url(#soleGrad)"/>
+    <!-- Tread marks -->
+    <rect x="25" y="67" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="40" y="66" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="55" y="65" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="70" y="64" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="85" y="63" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="100" y="62" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <rect x="115" y="61" width="8" height="3" rx="1" fill="#1e1e1e" opacity="0.4"/>
+    <!-- Upper shoe -->
+    <path d="M20 58 Q15 45 20 30 Q25 18 45 12 L70 8 Q85 6 90 15 L95 28 L120 45 Q130 50 130 55 L120 52 L25 55Z" fill="url(#shoeGrad)"/>
+    <!-- Swoosh/check mark -->
+    <path d="M30 48 Q50 32 80 28 Q100 25 115 35 L105 38 Q90 30 70 33 Q50 37 35 50Z" fill="white" opacity="0.85"/>
+    <!-- Tongue -->
+    <path d="M45 12 Q50 2 60 0 Q70 -1 75 5 L78 12 Q72 8 60 8 Q52 9 45 12Z" fill="#2ecc71" opacity="0.7"/>
+    <!-- Lace holes -->
+    <circle cx="52" cy="18" r="2.5" fill="#1e1e1e" opacity="0.6"/>
+    <circle cx="60" cy="15" r="2.5" fill="#1e1e1e" opacity="0.6"/>
+    <circle cx="68" cy="13" r="2.5" fill="#1e1e1e" opacity="0.6"/>
+    <!-- Laces -->
+    <line x1="52" y1="18" x2="68" y2="13" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="60" y1="15" x2="52" y2="18" stroke="white" stroke-width="1" opacity="0.5"/>
+    <!-- Heel accent -->
+    <path d="M20 30 Q18 40 20 55 L28 53 Q26 42 27 32Z" fill="#2ecc71" opacity="0.5"/>
+  </g>
+  <!-- Brand text -->
+  <text x="100" y="160" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="16" fill="white" letter-spacing="3">SNEAKERHEADS</text>
+</svg>

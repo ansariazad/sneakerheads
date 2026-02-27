@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatPrice } from '@/lib/db';
 
 export default function SneakerCard({ sneaker }) {
@@ -9,11 +10,13 @@ export default function SneakerCard({ sneaker }) {
     return (
         <div className="sneaker-card">
             <div className="card-img">
-                <img
+                <Image
                     src={imageUrl}
                     alt={`${sneaker.brand} ${sneaker.model}`}
+                    fill
+                    sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    style={{ objectFit: 'cover' }}
                     loading="lazy"
-                    onError={(e) => { e.target.src = `https://placehold.co/400x300/2d2d2d/3498db?text=${encodeURIComponent(sneaker.brand + ' ' + sneaker.model)}`; }}
                 />
                 {sneaker.featured && <span className="featured-badge">Featured</span>}
                 {sneaker.condition && sneaker.condition !== 'new' && <span className="condition-badge">{sneaker.condition.replace('_', ' ')}</span>}

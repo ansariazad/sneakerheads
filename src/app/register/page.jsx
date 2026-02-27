@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { signUp } from '@/lib/auth';
 
@@ -32,47 +33,65 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="container">
-            <div className="form-container">
-                <h2 className="form-title">Create an Account</h2>
+        <div className="auth-page">
+            <div className="auth-card">
+                <div className="auth-logo">
+                    <Image src="/images/sneakerheads-logo.svg" alt="Sneakerheads" width={80} height={80} priority />
+                </div>
+                <h2 className="auth-title">Create Account</h2>
+                <p className="auth-subtitle">Join the Sneakerheads community</p>
                 {error && <div className="alert alert-error">{error}</div>}
                 {success && <div className="alert alert-success">{success}</div>}
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username" value={form.username} onChange={handleChange} required />
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" id="username" name="username" value={form.username} onChange={handleChange} placeholder="sneakerfan" required />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" value={form.fullName} onChange={handleChange} placeholder="John Doe" required />
+                        </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" value={form.email} onChange={handleChange} required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" value={form.fullName} onChange={handleChange} required />
+                        <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" required />
                     </div>
                     <div className="form-row">
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" value={form.password} onChange={handleChange} required />
+                            <input type="password" id="password" name="password" value={form.password} onChange={handleChange} placeholder="••••••••" required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required />
+                            <input type="password" id="confirmPassword" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} placeholder="••••••••" required />
                         </div>
                     </div>
                     <div className="form-group">
                         <label>Account Type</label>
-                        <div className="radio-group">
-                            <label><input type="radio" name="userType" value="buyer" checked={form.userType === 'buyer'} onChange={handleChange} /> Buyer (I want to buy sneakers)</label>
-                            <label><input type="radio" name="userType" value="seller_buyer" checked={form.userType === 'seller_buyer'} onChange={handleChange} /> Seller/Buyer (I want to buy and sell sneakers)</label>
+                        <div className="account-type-cards">
+                            <label className={`type-card ${form.userType === 'buyer' ? 'active' : ''}`}>
+                                <input type="radio" name="userType" value="buyer" checked={form.userType === 'buyer'} onChange={handleChange} />
+                                <i className="fas fa-shopping-bag"></i>
+                                <span className="type-label">Buyer</span>
+                                <span className="type-desc">Buy sneakers</span>
+                            </label>
+                            <label className={`type-card ${form.userType === 'seller_buyer' ? 'active' : ''}`}>
+                                <input type="radio" name="userType" value="seller_buyer" checked={form.userType === 'seller_buyer'} onChange={handleChange} />
+                                <i className="fas fa-store"></i>
+                                <span className="type-label">Seller / Buyer</span>
+                                <span className="type-desc">Buy & sell sneakers</span>
+                            </label>
                         </div>
                     </div>
                     <div className="form-actions">
-                        <button type="submit" className="btn" disabled={loading}>{loading ? 'Creating Account...' : 'Register'}</button>
+                        <button type="submit" className="btn btn-gradient btn-full" disabled={loading}>
+                            {loading ? <><span className="btn-spinner"></span> Creating Account...</> : 'Create Account'}
+                        </button>
                     </div>
                 </form>
-                <div className="form-footer">
-                    <p>Already have an account? <Link href="/login">Login</Link></p>
+                <div className="auth-footer">
+                    <p>Already have an account? <Link href="/login">Sign In</Link></p>
                 </div>
             </div>
         </div>
