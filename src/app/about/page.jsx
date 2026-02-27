@@ -53,7 +53,7 @@ export default function AboutPage() {
                     <p className="team-intro">Meet the passionate sneaker enthusiasts behind Sneakerheads</p>
                     <div className="team-grid">
                         {[
-                            { name: 'SAJID KHAN', role: 'Founder & CEO', desc: 'Sneaker collector for over 10 years with a passion for Air Jordans' },
+                            { name: 'Azad Ansari', role: 'Co-Founder & CEO', desc: 'Sneaker collector for over 10 years with a passion for Air Jordans' },
                             { name: 'Travis Scott', role: 'COO', desc: 'Sneaker enthusiast with expertise in retail operations' },
                             { name: 'MC STAN', role: 'Head of Authentication', desc: 'Certified sneaker authenticator with an eye for detail' },
                             { name: 'Kendal Jenner', role: 'Community Manager', desc: 'Connecting sneaker enthusiasts across India' },
