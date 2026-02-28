@@ -1,10 +1,22 @@
+import Image from 'next/image';
+
 export default function Loading() {
     return (
-        <div className="container" style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <div className="loading-spinner-container">
-                <div className="loading-spinner"></div>
-                <p style={{ color: 'var(--text-secondary)', marginTop: 20 }}>Loading...</p>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '60vh',
+            gap: 20,
+        }}>
+            <div className="loading-logo-pulse">
+                <Image src="/images/sneakerheads-logo.svg" alt="Loading" width={80} height={80} priority />
             </div>
+            <div className="loading-bar">
+                <div className="loading-bar-fill"></div>
+            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Loading awesome sneakers...</p>
         </div>
     );
 }

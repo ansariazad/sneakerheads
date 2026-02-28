@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ChatBot from '@/components/ChatBot';
 import { AuthProvider } from '@/components/AuthProvider';
 
 const outfit = Outfit({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800'] });
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
                         {children}
                     </div>
                     <Footer />
+                    <ChatBot />
                 </AuthProvider>
             </body>
         </html>

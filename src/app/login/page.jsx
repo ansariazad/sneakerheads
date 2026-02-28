@@ -19,9 +19,9 @@ function LoginContent() {
     // Auto-redirect if already logged in
     useEffect(() => {
         if (!authLoading && user) {
-            router.replace(redirectTo);
+            window.location.href = redirectTo;
         }
-    }, [user, authLoading, redirectTo, router]);
+    }, [user, authLoading, redirectTo]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

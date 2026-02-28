@@ -104,7 +104,73 @@ function HomeContent() {
                 </div>
             </div>
 
-            {/* Featured Sneakers */}
+            {/* Category Pills */}
+            <div style={{ marginTop: 30, marginBottom: 10 }}>
+                <h2 style={{ marginBottom: 16 }}>Shop by Category</h2>
+                <div className="category-pills">
+                    <Link href="/search" className="category-pill active"><i className="fas fa-fire"></i> All</Link>
+                    <Link href="/search?q=men" className="category-pill"><i className="fas fa-male"></i> Men</Link>
+                    <Link href="/search?q=women" className="category-pill"><i className="fas fa-female"></i> Women</Link>
+                    <Link href="/search?q=kids" className="category-pill"><i className="fas fa-child"></i> Kids</Link>
+                    <Link href="/search?brand=Nike" className="category-pill"><i className="fas fa-check"></i> Nike</Link>
+                    <Link href="/search?brand=Adidas" className="category-pill"><i className="fas fa-check"></i> Adidas</Link>
+                    <Link href="/search?brand=Jordan" className="category-pill"><i className="fas fa-check"></i> Jordan</Link>
+                    <Link href="/search?brand=Puma" className="category-pill"><i className="fas fa-check"></i> Puma</Link>
+                    <Link href="/search?brand=New Balance" className="category-pill"><i className="fas fa-check"></i> New Balance</Link>
+                    <Link href="/search?q=campus" className="category-pill">🇮🇳 Campus</Link>
+                    <Link href="/search?q=sparx" className="category-pill">🇮🇳 Sparx</Link>
+                    <Link href="/search?q=woodland" className="category-pill">🇮🇳 Woodland</Link>
+                </div>
+            </div>
+
+            {/* Price Comparison Section — BuyHatke Style */}
+            <div style={{ margin: '30px 0', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--glass-border)', padding: 24, overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                    <i className="fas fa-chart-line" style={{ color: 'var(--primary-color)', fontSize: 20 }}></i>
+                    <h2 style={{ margin: 0, fontSize: 20 }}>Price Comparison</h2>
+                    <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-secondary)' }}>Powered by Sneakerheads</span>
+                </div>
+                <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+                        <thead>
+                            <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
+                                <th style={{ textAlign: 'left', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>Sneaker</th>
+                                <th style={{ textAlign: 'center', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>Sneakerheads</th>
+                                <th style={{ textAlign: 'center', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>Amazon</th>
+                                <th style={{ textAlign: 'center', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>Flipkart</th>
+                                <th style={{ textAlign: 'center', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>Nike.in</th>
+                                <th style={{ textAlign: 'center', padding: '10px 12px', color: 'var(--text-secondary)', fontWeight: 500 }}>You Save</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {[
+                                { name: 'Jordan 1 Retro High', ours: 16995, amazon: 21999, flipkart: 19999, nike: 18295 },
+                                { name: 'Yeezy 350 V2', ours: 22999, amazon: 29999, flipkart: 27499, nike: null },
+                                { name: 'Dunk Low Panda', ours: 8995, amazon: 12499, flipkart: 10999, nike: 9695 },
+                                { name: 'Air Max 90', ours: 12499, amazon: 15999, flipkart: 14499, nike: 13995 },
+                            ].map((row, i) => {
+                                const prices = [row.ours, row.amazon, row.flipkart, row.nike].filter(Boolean);
+                                const maxPrice = Math.max(...prices);
+                                const saved = maxPrice - row.ours;
+                                const fmt = (p) => p ? `₹${p.toLocaleString('en-IN')}` : '—';
+                                return (
+                                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                                        <td style={{ padding: '12px', fontWeight: 600 }}>{row.name}</td>
+                                        <td style={{ padding: '12px', textAlign: 'center', color: '#06d6a0', fontWeight: 700 }}>{fmt(row.ours)} ✓</td>
+                                        <td style={{ padding: '12px', textAlign: 'center', color: 'var(--text-secondary)' }}>{fmt(row.amazon)}</td>
+                                        <td style={{ padding: '12px', textAlign: 'center', color: 'var(--text-secondary)' }}>{fmt(row.flipkart)}</td>
+                                        <td style={{ padding: '12px', textAlign: 'center', color: 'var(--text-secondary)' }}>{fmt(row.nike)}</td>
+                                        <td style={{ padding: '12px', textAlign: 'center' }}>
+                                            <span style={{ background: 'rgba(6,214,160,0.12)', color: '#06d6a0', padding: '3px 10px', borderRadius: 50, fontSize: 12, fontWeight: 600 }}>Save {fmt(saved)}</span>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div className="featured-section">
                 <div className="section-header">
                     <h2>🔥 Featured Sneakers</h2>
