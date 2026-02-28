@@ -1,8 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { getSneakers, getBrands } from '@/lib/db';
+import { useAuth } from '@/components/AuthProvider';
 import SneakerCard from '@/components/SneakerCard';
 
 const showcaseSneakers = [
@@ -21,11 +23,37 @@ const offers = [
     { title: 'Seller Special', subtitle: 'List your first pair for free', code: 'SELL0', icon: 'fa-store', gradient: 'linear-gradient(135deg, #f59e0b, #ef4444)' },
 ];
 
-export default function HomePage() {
+function HomeContent() {
+    const { user, profile } = useAuth();
+    const searchParams = useSearchParams();
     const [featured, setFeatured] = useState([]);
     const [newArrivals, setNewArrivals] = useState([]);
     const [brands, setBrands] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [toast, setToast] = useState(null);
+
+    // Welcome toast
+    useEffect(() => {
+        const isWelcome = searchParams.get('welcome');
+        const isLoggedIn = searchParams.get('loggedin');
+        if (isWelcome) {
+            const name = profile?.full_name || profile?.username || 'Sneakerhead';
+            setToast({ type: 'success', message: `🎉 Welcome to Sneakerheads, ${name}! Your account is ready.` });
+            window.history.replaceState({}, '', '/');
+        } else if (isLoggedIn) {
+            const name = profile?.full_name || profile?.username || '';
+            setToast({ type: 'success', message: `👋 Welcome back${name ? ', ' + name : ''}!` });
+            window.history.replaceState({}, '', '/');
+        }
+    }, [searchParams, profile]);
+
+    // Auto-dismiss toast
+    useEffect(() => {
+        if (toast) {
+            const t = setTimeout(() => setToast(null), 5000);
+            return () => clearTimeout(t);
+        }
+    }, [toast]);
 
     useEffect(() => {
         const load = async () => {
@@ -42,6 +70,13 @@ export default function HomePage() {
 
     return (
         <div className="container">
+            {/* Welcome Toast */}
+            {toast && (
+                <div className={`toast toast-${toast.type}`}>
+                    <span>{toast.message}</span>
+                    <button onClick={() => setToast(null)} className="toast-close"><i className="fas fa-times"></i></button>
+                </div>
+            )}
             <div className="hero">
                 <div className="hero-content">
                     <h1>Find Your <span>Perfect Pair</span></h1>
@@ -132,5 +167,13 @@ export default function HomePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function HomePage() {
+    return (
+        <Suspense fallback={<div className="container"><p style={{ textAlign: 'center', padding: 60, color: 'var(--text-secondary)' }}>Loading...</p></div>}>
+            <HomeContent />
+        </Suspense>
     );
 }

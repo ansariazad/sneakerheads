@@ -30,7 +30,8 @@ function LoginContent() {
         try {
             await signIn({ email, password });
             // Use window.location for a full page reload to sync server/client auth
-            window.location.href = redirectTo;
+            const dest = redirectTo === '/' ? '/?loggedin=1' : redirectTo;
+            window.location.href = dest;
         } catch (err) {
             setError(err.message || 'Login failed. Please check your credentials.');
         } finally {

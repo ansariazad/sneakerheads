@@ -2,14 +2,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { signUp } from '@/lib/auth';
+import { signUp, signIn } from '@/lib/auth';
 
 export default function RegisterPage() {
-    const router = useRouter();
     const [form, setForm] = useState({ username: '', email: '', fullName: '', password: '', confirmPassword: '', userType: 'buyer' });
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,17 +14,18 @@ export default function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setSuccess('');
         if (form.password !== form.confirmPassword) { setError('Passwords do not match.'); return; }
         if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
 
         setLoading(true);
         try {
             await signUp({ email: form.email, password: form.password, username: form.username, fullName: form.fullName, userType: form.userType });
-            setSuccess('Registration successful! Please check your email to verify your account.');
+            // Auto-login after registration
+            await signIn({ email: form.email, password: form.password });
+            // Full page reload to sync auth state everywhere
+            window.location.href = '/?welcome=1';
         } catch (err) {
             setError(err.message || 'Registration failed.');
-        } finally {
             setLoading(false);
         }
     };
@@ -41,7 +39,6 @@ export default function RegisterPage() {
                 <h2 className="auth-title">Create Account</h2>
                 <p className="auth-subtitle">Join the Sneakerheads community</p>
                 {error && <div className="alert alert-error">{error}</div>}
-                {success && <div className="alert alert-success">{success}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-row">
                         <div className="form-group">
