@@ -312,6 +312,7 @@ textarea:focus {
 .search-bar {
   flex: 1;
   max-width: 420px;
+  position: relative;
 }
 
 .search-bar form {
@@ -343,6 +344,82 @@ textarea:focus {
   border-color: var(--primary-color);
   box-shadow: var(--glow-primary);
   background: var(--bg-secondary);
+}
+
+/* Search Suggestions Dropdown */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  overflow: hidden;
+  animation: toastSlide 0.2s ease;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.suggestion-item:hover {
+  background: var(--bg-light);
+}
+
+.suggestion-item i {
+  color: var(--text-secondary);
+  font-size: 13px;
+  width: 18px;
+  text-align: center;
+}
+
+.suggestion-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.suggestion-brand {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 6px;
+}
+
+.suggestion-type {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--primary-color);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.suggestion-footer {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  border-top: 1px solid var(--glass-border);
+  transition: background 0.15s;
+}
+
+.suggestion-footer:hover {
+  background: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.suggestion-footer i {
+  margin-right: 6px;
 }
 
 .main-nav ul {
