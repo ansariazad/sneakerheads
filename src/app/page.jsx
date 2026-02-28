@@ -6,13 +6,13 @@ import { getSneakers, getBrands } from '@/lib/db';
 import SneakerCard from '@/components/SneakerCard';
 
 const showcaseSneakers = [
-    { id: 'showcase-1', brand: 'Nike', model: 'Air Jordan 1 Retro High OG', size: 9, price: 16995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-jordan1.png', display_order: 0 }] },
-    { id: 'showcase-2', brand: 'Adidas', model: 'Yeezy Boost 350 V2', size: 10, price: 22999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/adidas-yeezy350.png', display_order: 0 }] },
-    { id: 'showcase-3', brand: 'Nike', model: 'Dunk Low Panda', size: 8, price: 8995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-dunk-low.png', display_order: 0 }] },
-    { id: 'showcase-4', brand: 'Jordan', model: 'Air Jordan 4 Retro', size: 11, price: 19999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/jordan4-retro.png', display_order: 0 }] },
-    { id: 'showcase-5', brand: 'Puma', model: 'RS-X Reinvention', size: 9, price: 7499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/puma-rsx.png', display_order: 0 }] },
-    { id: 'showcase-6', brand: 'Nike', model: 'Air Max 90 Infrared', size: 10, price: 12499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/nike-airmax90.png', display_order: 0 }] },
-    { id: 'showcase-7', brand: 'New Balance', model: '550 Green', size: 8, price: 10999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/newbalance-550.png', display_order: 0 }] },
+    { id: 'showcase-1', brand: 'Nike', model: 'Air Jordan 1 Retro High OG', size: 9, price: 16995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-jordan1.jpg', display_order: 0 }] },
+    { id: 'showcase-2', brand: 'Adidas', model: 'Yeezy Boost 350 V2', size: 10, price: 22999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/adidas-yeezy350.jpg', display_order: 0 }] },
+    { id: 'showcase-3', brand: 'Nike', model: 'Dunk Low Panda', size: 8, price: 8995, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/nike-dunk-low.jpg', display_order: 0 }] },
+    { id: 'showcase-4', brand: 'Jordan', model: 'Air Jordan 4 Retro', size: 11, price: 19999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/jordan4-retro.jpg', display_order: 0 }] },
+    { id: 'showcase-5', brand: 'Puma', model: 'RS-X Reinvention', size: 9, price: 7499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/puma-rsx.jpg', display_order: 0 }] },
+    { id: 'showcase-6', brand: 'Nike', model: 'Air Max 90 Infrared', size: 10, price: 12499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/nike-airmax90.jpg', display_order: 0 }] },
+    { id: 'showcase-7', brand: 'New Balance', model: '550 Green', size: 8, price: 10999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/newbalance-550.jpg', display_order: 0 }] },
 ];
 
 const offers = [

@@ -1,18 +1,27 @@
 'use client';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import { signIn } from '@/lib/auth';
 
 function LoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { user, loading: authLoading } = useAuth();
     const redirectTo = searchParams.get('redirect') || '/';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // Auto-redirect if already logged in
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.replace(redirectTo);
+        }
+    }, [user, authLoading, redirectTo, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,14 +29,26 @@ function LoginContent() {
         setLoading(true);
         try {
             await signIn({ email, password });
-            router.push(redirectTo);
-            router.refresh();
+            // Use window.location for a full page reload to sync server/client auth
+            window.location.href = redirectTo;
         } catch (err) {
             setError(err.message || 'Login failed. Please check your credentials.');
         } finally {
             setLoading(false);
         }
     };
+
+    // If auth is loading or user is already logged in, show loading
+    if (authLoading || user) {
+        return (
+            <div className="auth-page">
+                <div className="auth-card" style={{ textAlign: 'center', padding: '60px 40px' }}>
+                    <div className="btn-spinner" style={{ width: 36, height: 36, margin: '0 auto 16px', borderWidth: 3 }}></div>
+                    <p style={{ color: 'var(--text-secondary)' }}>Redirecting...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="auth-page">

@@ -1,30 +1,53 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
 import { signOut } from '@/lib/auth';
 import { getCartCount, getUnreadNotificationCount } from '@/lib/db';
 
 export default function Header() {
     const { user, profile, loading } = useAuth();
+    const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [cartCount, setCartCount] = useState(0);
     const [notificationCount, setNotificationCount] = useState(0);
     const [scrolled, setScrolled] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const isLoggedIn = !!user;
     const isSeller = profile?.user_type === 'seller_buyer' || profile?.user_type === 'superadmin';
     const isAdmin = profile?.user_type === 'superadmin';
     const username = profile?.username || user?.email?.split('@')[0] || '';
 
-    useEffect(() => {
-        if (user) {
-            getCartCount(user.id).then(setCartCount).catch(() => { });
-            getUnreadNotificationCount(user.id).then(setNotificationCount).catch(() => { });
-        }
+    // Fetch cart and notification counts
+    const refreshCounts = useCallback(async () => {
+        if (!user) return;
+        try {
+            const [cc, nc] = await Promise.all([
+                getCartCount(user.id).catch(() => 0),
+                getUnreadNotificationCount(user.id).catch(() => 0),
+            ]);
+            setCartCount(cc);
+            setNotificationCount(nc);
+        } catch { }
     }, [user]);
+
+    useEffect(() => {
+        refreshCounts();
+        // Refresh counts every 30 seconds
+        const interval = setInterval(refreshCounts, 30000);
+        return () => clearInterval(interval);
+    }, [refreshCounts]);
+
+    // Also refresh counts when page gets focus (user comes back from another tab)
+    useEffect(() => {
+        const onFocus = () => refreshCounts();
+        window.addEventListener('focus', onFocus);
+        return () => window.removeEventListener('focus', onFocus);
+    }, [refreshCounts]);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -32,11 +55,29 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        if (!dropdownOpen) return;
+        const handleClick = (e) => {
+            if (!e.target.closest('.user-dropdown')) setDropdownOpen(false);
+        };
+        document.addEventListener('click', handleClick);
+        return () => document.removeEventListener('click', handleClick);
+    }, [dropdownOpen]);
+
     const handleSignOut = async () => {
         await signOut();
         setDropdownOpen(false);
         setMobileMenuOpen(false);
         window.location.href = '/';
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setMobileMenuOpen(false);
+        }
     };
 
     return (
@@ -51,9 +92,14 @@ export default function Header() {
                         </Link>
                     </div>
                     <div className="search-bar">
-                        <form action="/search" method="GET">
+                        <form onSubmit={handleSearch}>
                             <i className="fas fa-search search-icon"></i>
-                            <input type="text" name="q" placeholder="Search sneakers, brands..." />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search sneakers, brands..."
+                            />
                         </form>
                     </div>
                     <nav className={`main-nav${mobileMenuOpen ? ' show' : ''}`}>

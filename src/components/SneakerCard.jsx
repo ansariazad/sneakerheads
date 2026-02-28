@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function SneakerCard({ sneaker }) {
-    const imageUrl = sneaker.images?.[0]?.image_url || `/images/sneakers/nike-jordan1.png`;
+    const imageUrl = sneaker.images?.[0]?.image_url || `/images/sneakers/nike-jordan1.jpg`;
     const isShowcase = sneaker.id?.startsWith?.('showcase-');
     const href = isShowcase ? '/search' : `/sneaker/${sneaker.id}`;
     const isExternal = imageUrl.startsWith('http');
