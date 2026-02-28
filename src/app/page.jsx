@@ -15,6 +15,14 @@ const showcaseSneakers = [
     { id: 'showcase-5', brand: 'Puma', model: 'RS-X Reinvention', size: 9, price: 7499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/puma-rsx.jpg', display_order: 0 }] },
     { id: 'showcase-6', brand: 'Nike', model: 'Air Max 90 Infrared', size: 10, price: 12499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/nike-airmax90.jpg', display_order: 0 }] },
     { id: 'showcase-7', brand: 'New Balance', model: '550 Green', size: 8, price: 10999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/newbalance-550.jpg', display_order: 0 }] },
+    // Real seller-uploaded sneakers
+    { id: 'showcase-8', brand: 'Nike', model: 'Air Force 1 Low White', size: 9, price: 7999, featured: true, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker1-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker1-side.jpg', display_order: 1 }] },
+    { id: 'showcase-9', brand: 'Adidas', model: 'Ultraboost 22', size: 10, price: 14999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker2-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker2-side.jpg', display_order: 1 }] },
+    { id: 'showcase-10', brand: 'Reebok', model: 'Classic Leather', size: 8, price: 6999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker3-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker3-side.jpg', display_order: 1 }] },
+    { id: 'showcase-11', brand: 'Campus', model: 'Running Pro', size: 9, price: 1499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker4-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker4-side.jpg', display_order: 1 }] },
+    { id: 'showcase-12', brand: 'Woodland', model: 'Outdoor Sport', size: 10, price: 3499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker5-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker5-side.jpg', display_order: 1 }] },
+    { id: 'showcase-13', brand: 'Sparx', model: 'SM-439 Sport', size: 8, price: 999, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker6-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker6-side.jpg', display_order: 1 }] },
+    { id: 'showcase-14', brand: 'Red Tape', model: 'Walking Shoes', size: 9, price: 2499, featured: false, condition: 'new', images: [{ image_url: '/images/sneakers/seller-sneaker7-top.jpg', display_order: 0 }, { image_url: '/images/sneakers/seller-sneaker7-side.jpg', display_order: 1 }] },
 ];
 
 const offers = [
