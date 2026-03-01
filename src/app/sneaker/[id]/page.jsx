@@ -123,6 +123,21 @@ export default function SneakerDetailPage() {
                         </button>
                         <button className="btn btn-secondary" onClick={handleAddToWishlist}><i className="fas fa-heart"></i> Wishlist</button>
                     </div>
+                    {/* Try Before Buy */}
+                    <div style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.15)', borderRadius: 'var(--radius)', padding: 16, marginBottom: 20 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(59,130,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <i className="fas fa-shoe-prints" style={{ color: 'var(--primary-color)' }}></i>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <h4 style={{ margin: '0 0 2px', fontSize: 14 }}>Try Before You Buy</h4>
+                                <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary)' }}>Try at home for 7 days. Only ₹500 refundable deposit.</p>
+                            </div>
+                            <Link href="/try" className="btn btn-gradient" style={{ fontSize: 13, padding: '8px 16px', whiteSpace: 'nowrap' }}>
+                                <i className="fas fa-box-open" style={{ marginRight: 6 }}></i>Try at Home
+                            </Link>
+                        </div>
+                    </div>
                     <div className="sneaker-guarantees">
                         <div className="guarantee-item"><i className="fas fa-shield-alt"></i><span>100% Authentic</span></div>
                         <div className="guarantee-item"><i className="fas fa-shipping-fast"></i><span>Free Shipping</span></div>

@@ -168,6 +168,7 @@ export default function Header() {
                         <ul>
                             <li><Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link></li>
                             <li><Link href="/search" onClick={() => setMobileMenuOpen(false)}>Shop</Link></li>
+                            <li><Link href="/try" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--primary-color)' }}>Try at Home</Link></li>
                             <li><Link href="/about" onClick={() => setMobileMenuOpen(false)}>About</Link></li>
                             {!loading && isLoggedIn ? (
                                 <>
